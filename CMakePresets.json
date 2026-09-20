@@ -1,0 +1,42 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 27,
+    "patch": 0
+  },
+  "include": [
+    "external/CMakePresets.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "wordplay-bot-config",
+      "inherits": "controller-config",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "wordplay-bot-build",
+      "configurePreset": "wordplay-bot-config"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "wordplay-bot-workflow",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "wordplay-bot-config"
+        },
+        {
+          "type": "build",
+          "name": "wordplay-bot-build"
+        }
+      ]
+    }
+  ]
+}
