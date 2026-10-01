@@ -11,7 +11,7 @@
   "configurePresets": [
     {
       "name": "wordplay-bot-config",
-      "inherits": "controller-config",
+      "inherits": "host-config",
       "architecture": {
         "value": "x64",
         "strategy": "external"

@@ -10,11 +10,11 @@ struct WordSlot {
     uint16_t startRow;
     uint16_t startCol;
     uint16_t length;
+    int wordIndex = -1;
 };
 struct Intersection {
     size_t slotAIndex;
     size_t slotBIndex;
-
     uint8_t slotAOffset;
     uint8_t slotBOffset;
 };
