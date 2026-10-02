@@ -1,5 +1,11 @@
 #pragma once
 #include <array>
+#include <functional>
+#include <vector>
+
+constexpr int32_t NO_GUESS = -1;
+
+using AlphabetFrequencies = std::array<uint8_t, 26>;
 
 enum class SlotDirection : uint8_t {
     Horizontal,
@@ -7,16 +13,22 @@ enum class SlotDirection : uint8_t {
 };
 struct WordSlot {
     SlotDirection direction;
-    uint16_t startRow;
-    uint16_t startCol;
-    uint16_t length;
-    int wordIndex = -1;
+    uint8_t startRow;
+    uint8_t startCol;
+    uint8_t length;
 };
 struct Intersection {
-    size_t slotAIndex;
-    size_t slotBIndex;
+    uint8_t slotAIndex;
+    uint8_t slotBIndex;
     uint8_t slotAOffset;
     uint8_t slotBOffset;
 };
-using AlphabetFrequencies = std::array<uint8_t, 26>;
+struct PuzzleLayout {
+    std::vector<WordSlot> slots;
+    std::vector<Intersection> intersections;
+};
+struct PuzzleState {
+    std::reference_wrapper<PuzzleLayout> layout;
+    std::vector<int32_t> guesses;
+};
 

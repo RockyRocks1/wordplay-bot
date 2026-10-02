@@ -14,6 +14,7 @@ add_subdirectory(external)
 add_executable(${PROJECT_NAME}
 	src/main.cpp
     src/puzzle/TrieEngine.cpp
+    src/puzzle/SolverEngine.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE 
