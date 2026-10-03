@@ -9,15 +9,15 @@ SolverEngine::SolverEngine(PuzzleState& initialState) : m_state(initialState) {
 	m_state.guesses.assign(layout.slots.size(), -1);
 }
 
-bool SolverEngine::Solve(const WordList& wordList) {
+bool SolverEngine::Solve(const WordList& wordList, int maxSolutionCount) {
 	const PuzzleLayout& layout = m_state.layout.get();
 	if (wordList.words.size() < layout.slots.size())
 		return false;
 
 	m_state.isWordUsed.assign(wordList.words.size(), 0);
-	return SolveRecursive(wordList, 0);
+	return SolveRecursive(wordList, 0, maxSolutionCount);
 }
-bool SolverEngine::SolveRecursive(const WordList& wordList, int8_t currentSlotIndex) {
+bool SolverEngine::SolveRecursive(const WordList& wordList, int8_t currentSlotIndex, int maxSolutionCount) {
 	if (currentSlotIndex == m_state.layout.get().slots.size())
 		return true;
 
@@ -45,8 +45,11 @@ bool SolverEngine::SolveRecursive(const WordList& wordList, int8_t currentSlotIn
 			}
 		}
 		
-		if (!failedIntersectionCheck && SolveRecursive(wordList, currentSlotIndex + 1))
-			return true;
+		if (!failedIntersectionCheck && SolveRecursive(wordList, currentSlotIndex + 1, maxSolutionCount)) {
+			m_solutions.push_back(m_state);
+			if (m_solutions.size() >= maxSolutionCount)
+				return true;
+		}
 
 		m_state.guesses[currentSlotIndex] = -1;
 		m_state.isWordUsed[wordIndex] = 0;

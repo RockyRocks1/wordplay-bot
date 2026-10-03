@@ -1,6 +1,7 @@
 #include <iostream>
 #include "puzzle/TrieEngine.hpp"
 #include "puzzle/SolverEngine.hpp"
+
 int main() {
 	/*
 	CapContext context = Cap_createContext();
@@ -21,6 +22,9 @@ int main() {
 	pool['c' - 'a'] = 1;
 	pool['a' - 'a'] = 1;
 	pool['t' - 'a'] = 1;
+	pool['d' - 'a'] = 1;
+	pool['o' - 'a'] = 1;
+	pool['g' - 'a'] = 1;
 	TrieEngine engine;
 	engine.InsertWord("dog");
 	engine.InsertWord("cat");
@@ -29,7 +33,8 @@ int main() {
 	engine.GetPrunedWordList(pool, wordList);
 	PuzzleLayout layout{
 		.slots = {
-			WordSlot{ SlotDirection::Horizontal, 0, 0, 3 }
+			WordSlot{ SlotDirection::Horizontal, 0, 0, 3 },
+			WordSlot{ SlotDirection::Horizontal, 1, 1, 3 }
 		},
 		.intersections = {}
 	};
@@ -39,8 +44,8 @@ int main() {
 		.isWordUsed = {}
 	};
 	SolverEngine solver(state);
-	solver.Solve(wordList);
-	auto hi = solver.GetState();
-	std::cout << hi.isWordUsed[0] << std::endl;
+	solver.Solve(wordList, 3);
+	auto hi = solver.GetSolutions();
+	std::cout << hi.size() << std::endl;
 	
 }

@@ -5,13 +5,14 @@
 class SolverEngine {
 public:
 	SolverEngine(PuzzleState& initialState);
-	// TODO: add exhaustive solution finding
-	bool Solve(const WordList& wordList);
-	inline const PuzzleState& GetState() const noexcept {
-		return m_state;
+	bool Solve(const WordList& wordList, int maxSolutionCount = 1);
+	inline const std::vector<PuzzleState>& GetSolutions() const noexcept {
+		return m_solutions;
 	}
 private:
 	PuzzleState& m_state;
+	std::vector<PuzzleState> m_solutions;
 	std::vector<std::vector<Intersection>> m_intersectionsBySlot;
-	bool SolveRecursive(const WordList& wordList, int8_t currentSlotIndex);
+	// TODO: use a hueristic to make this faster...
+	bool SolveRecursive(const WordList& wordList, int8_t currentSlotIndex, int maxSolutionCount = 1);
 };

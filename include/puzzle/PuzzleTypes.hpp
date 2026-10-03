@@ -31,7 +31,6 @@ struct PuzzleState {
     std::vector<int32_t> guesses;
     std::vector<uint8_t> isWordUsed;
 };
-
 struct WordListBoundary {
     uint32_t startIndex;
     uint32_t count;
