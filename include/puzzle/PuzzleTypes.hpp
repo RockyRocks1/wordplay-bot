@@ -2,8 +2,7 @@
 #include <array>
 #include <functional>
 #include <vector>
-
-constexpr int32_t NO_GUESS = -1;
+#include <string>
 
 using AlphabetFrequencies = std::array<uint8_t, 26>;
 
@@ -30,5 +29,14 @@ struct PuzzleLayout {
 struct PuzzleState {
     std::reference_wrapper<PuzzleLayout> layout;
     std::vector<int32_t> guesses;
+    std::vector<uint8_t> isWordUsed;
 };
 
+struct WordListBoundary {
+    uint32_t startIndex;
+    uint32_t count;
+};
+struct WordList {
+    std::vector<std::string> words;
+    std::vector<WordListBoundary> boundaries;
+};

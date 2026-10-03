@@ -1,11 +1,15 @@
 #include "puzzle/TrieEngine.hpp"
 
-void TrieEngine::TraverseAndPrune(TrieNode* node, AlphabetFrequencies& letterWheel, std::vector<std::string>& outWordList, std::string& currentPath, uint8_t currentDepth) const{
+
+TrieEngine::TrieEngine() {
+	m_rootNode = std::make_unique<TrieNode>();
+};
+void TrieEngine::TraverseAndPrune(TrieNode* node, AlphabetFrequencies& letterWheel, WordList& outWordList, std::string& currentPath, uint8_t currentDepth) const {
 	if (!node || currentDepth > 8)
 		return;
-	if (node->isWord)
-		outWordList.push_back(currentPath);
-
+	if (node->isWord) 
+		outWordList.words.push_back(currentPath);
+		
 	for (int i = 0; i < 26; i++) {
 		if (letterWheel[i] == 0)
 			continue;
@@ -21,12 +25,37 @@ void TrieEngine::TraverseAndPrune(TrieNode* node, AlphabetFrequencies& letterWhe
 	}
 }
 
-void TrieEngine::GetPrunedWordList(AlphabetFrequencies letterWheel, std::vector<std::string>& outWordList) const {
-	outWordList.clear();
-	outWordList.reserve(128);
+void TrieEngine::GetPrunedWordList(AlphabetFrequencies letterWheel, WordList& outWordList) const {
+	std::vector<std::string>& words = outWordList.words;
+	std::vector<WordListBoundary>& boundaries = outWordList.boundaries;
+
+	words.clear();
+	boundaries.clear();
+	words.reserve(128);
 
 	std::string currentPath = "";
 	TraverseAndPrune(m_rootNode.get(), letterWheel, outWordList, currentPath, 0);
+
+	std::sort(words.begin(), words.end(), [](const std::string& a, const std::string& b) {
+		return a.size() < b.size();
+	});
+
+	size_t lastSize = 0;
+	WordListBoundary* activeBoundary = nullptr;
+
+	for (size_t i = 0; i < words.size(); i++) {
+		size_t currentSize = words[i].size();
+		if (currentSize != lastSize) {
+			boundaries.resize(currentSize + 1);
+			boundaries[currentSize] = WordListBoundary{
+				.startIndex = static_cast<uint32_t>(i),
+				.count = 0
+			};
+			activeBoundary = &boundaries[currentSize];
+			lastSize = currentSize;
+		}
+		activeBoundary->count++;
+	}
 }
 
 bool TrieEngine::InsertWord(std::string_view word) {
